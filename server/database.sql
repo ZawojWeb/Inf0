@@ -1,4 +1,4 @@
-CREATE DATABASE inf0db;
+CREATE DATABASE perntodo;
 
 CREATE TABLE todo(
     todo_id SERIAL PRIMARY KEY,
