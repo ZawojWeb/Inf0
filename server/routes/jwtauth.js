@@ -27,7 +27,7 @@ router.post("/register", validInfo, async (req, res) => {
     const bcryptPassword = await bcrypt.hash(password, salt)
 
     // Insert details in db
-    const newUser = await pool.query("INSERT INTO Users (nickname,mail,password,avatar_id) VALUES($1,$2, $3,$4) RETURNING *", [nick, mail, bcryptPassword, avatar_id])
+    const newUser = await pool.query("INSERT INTO Users (nickname,mail,password,avatar_id) VALUES($1,$2,$3,$4) RETURNING *", [nick, mail, bcryptPassword, avatar_id])
 
     // Generate JWT
     const token = jwtGenerator(newUser.rows[0].user_id)
@@ -42,11 +42,8 @@ router.post("/login", validInfo, async (req, res) => {
   try {
     // req.body
     const { mail, password } = req.body
-    console.log(req.body)
-
     // error if no such user
     const user = await pool.query("SELECT * FROM Users WHERE mail = $1", [mail])
-    console.log(user)
 
     if (user.rows.length === 0) {
       return res.status(401).json("Password or Username is incorrect, please reenter.")
@@ -61,7 +58,6 @@ router.post("/login", validInfo, async (req, res) => {
     }
 
     // provide token
-    console.log(user.rows[0])
     const token = jwtGenerator(user.rows[0].user_id)
     const nick = user.rows[0].nickname
     res.json({ nick, token })

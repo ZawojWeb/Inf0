@@ -10,13 +10,13 @@ CREATE TABLE Users(
 
 CREATE TABLE Groups(
    group_id SERIAL PRIMARY KEY,
-   name VARCHAR(255) NOT NULL,
-   privilege VARCHAR(255) NOT NULL
+   name VARCHAR(255) NOT NULL
 );
-
+CREATE TYPE privileges AS ENUM ('admin', 'editor', 'user');
 CREATE TABLE User_Group(
     user_id INT REFERENCES Users (user_id),
-    group_id INT REFERENCES Groups (group_id)
+    group_id INT REFERENCES Groups (group_id),
+    privilege privileges
 );
 
 CREATE TABLE Messages(
