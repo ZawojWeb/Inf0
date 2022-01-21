@@ -20,10 +20,8 @@ router.post("/register", validInfo, async (req, res) => {
     }
 
     // Bcrypt password
-
     const saltRound = 10
     const salt = await bcrypt.genSalt(saltRound)
-
     const bcryptPassword = await bcrypt.hash(password, salt)
 
     // Insert details in db

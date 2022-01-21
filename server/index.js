@@ -15,8 +15,6 @@ app.listen(5000, () => {
   console.log(`Server listening on port 5000`)
 })
 
-//! SUPER TODO:
-// [✅] Add enum into db
 //! TODO:
 // [] Add creating groups funcion, have to have: Normal query fo create groups, trigger for connect user with group and set privilage
 // [] Add creating APIs funcion, have to have: Normal query to add api, trigger for connect api with group
