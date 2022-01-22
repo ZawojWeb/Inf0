@@ -13,9 +13,10 @@ CREATE TABLE Groups(
    name VARCHAR(255) NOT NULL
 );
 CREATE TYPE privileges AS ENUM ('admin', 'editor', 'user');
+
 CREATE TABLE User_Group(
-    user_id INT REFERENCES Users (user_id),
-    group_id INT REFERENCES Groups (group_id),
+    user_id INT NOT NULL,
+    group_id INT NOT NULL,
     privilege privileges
 );
 
@@ -33,7 +34,7 @@ CREATE TABLE Messages_Group(
 
 CREATE TABLE APIsKey(
     apis_id SERIAL PRIMARY KEY,
-    NotionApiKey VARCHAR(2555),
+    NotionApiKey VARCHAR(255),
     DiscordApiKey VARCHAR(255),
     FacebookApiKey VARCHAR(255),
     SlackApiKey VARCHAR(255)
@@ -57,3 +58,41 @@ CREATE TABLE Tasks_Group_User(
     group_id INT REFERENCES Groups (group_id),
     user_id INT REFERENCES Users (user_id)
 );
+
+CREATE PROCEDURE createGroup(user_id INT,group_name VARCHAR(255))
+    LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        g_id INT; 
+    BEGIN
+        INSERT INTO Groups (name) VALUES (group_name) RETURNING group_id INTO  g_id ;
+        INSERT INTO User_Group (user_id,group_id,privilege) VALUES (user_id,g_id,'admin');
+    END
+    $$;
+
+DROP PROCEDURE createGroup(user_id INT,group_name VARCHAR(255));
+
+CALL createGroup(1,'Group1123');
+
+
+
+CREATE OR REPLACE FUNCTION  getUserGroups(user_id INT) 
+    RETURNS table (name VARCHAR(255), group_id INT, privilege privileges) 
+     LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        g_id INT := user_id; 
+    BEGIN
+        RETURN query 
+            SELECT g.name, g.group_id,ug.privilege
+            FROM Groups AS g
+            JOIN User_Group AS ug
+            ON g.group_id = ug.group_id
+            WHERE ug.user_id = g_id;
+        
+    END
+    $$;
+
+
+
+SELECT * FROM public.getUserGroups(1);

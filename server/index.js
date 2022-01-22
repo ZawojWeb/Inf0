@@ -9,7 +9,9 @@ app.use(express.json()) //req.body
 // register and login routes
 app.use("/auth", require("./routes/jwtAuth.js"))
 
-// Here implemet
+app.use("/userinfo", require("./routes/userinfo"))
+
+app.use("/group", require("./routes/groups"))
 
 app.listen(5000, () => {
   console.log(`Server listening on port 5000`)

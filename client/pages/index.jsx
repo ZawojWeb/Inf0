@@ -1,4 +1,3 @@
-import styles from "../styles/Home.module.css"
 import Hero from "./components/hero"
 import FAQ from "./components/FAQ"
 import HowWork from "./components/HowWork"
