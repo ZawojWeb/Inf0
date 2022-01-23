@@ -1,6 +1,9 @@
 import React from "react"
+import { useRouter } from "next/router"
 
-const SingleGroup = ({ name, privilege }) => {
+const SingleGroup = ({ name, privilege, id }) => {
+  const router = useRouter()
+
   return (
     <div className='w-full sm:w-1/2 lg:w-1/3 px-4 md:px-6 lg:px-8'>
       <div className='relative pt-4 bg-white rounded-2xl shadow-6xl'>
@@ -32,7 +35,14 @@ const SingleGroup = ({ name, privilege }) => {
             </div>
           </div>
           <div className='w-full md:max-w-max'>
-            <a className='block py-4 px-7 w-full text-lg leading-3 text-white font-medium tracking-tighter font-heading text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl' href='#'>
+            <a
+              className='block py-4 px-7 w-full text-lg leading-3 text-white font-medium tracking-tighter font-heading text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl'
+              onClick={(e) => {
+                e.preventDefault()
+                router.push(`/Groups/${id}`)
+              }}
+              href={`/Groups/${id}`}
+            >
               Przejdź
             </a>
           </div>
