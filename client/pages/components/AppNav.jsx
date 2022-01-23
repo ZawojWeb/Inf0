@@ -37,7 +37,7 @@ const AppNav = () => {
   }, [])
 
   return (
-    <section className='text-gray-50 font-heading font-medium relative bg-indigo-700'>
+    <section className='text-gray-50 font-heading font-medium relative bg-blue-500'>
       <nav className='flex justify-between px-6 lg:px-12 py-8'>
         <div className='flex w-full items-center justify-between'>
           <div className='flex items-center'>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import SingleGroup from "./SingleGroup"
 import CreateGroup from "./CreateGroup"
+import GroupCard from "./GroupCard"
 
 const Groups = () => {
   const [userId, setUserId] = useState("")
@@ -51,7 +51,7 @@ const Groups = () => {
         <div className='flex flex-wrap -mx-4 md:-mx-6 lg:-mx-8'>
           {groups.length > 0 &&
             groups.map((group) => {
-              return <SingleGroup name={group.name} privilege={group.privilege} key={group.group_id} />
+              return <GroupCard name={group.name} privilege={group.privilege} key={group.group_id} />
             })}
         </div>
       </div>
