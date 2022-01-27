@@ -66,7 +66,6 @@ router.get("/getUpis", authorization, async (req, res) => {
   try {
     const groupId = req.header("groupId")
 
-    //req.user has the payload
     const apiId = await pool.query("SELECT ag.apis_id, a.discordapikey,a.notionapikey,a.facebookapikey,a.slackapikey FROM apis_groups as ag JOIN apiskey as a ON ag.apis_id = a.apis_id  WHERE group_id = $1 ", [groupId])
     res.json(apiId.rows)
   } catch (err) {
@@ -77,7 +76,6 @@ router.get("/getUpis", authorization, async (req, res) => {
 router.post("/updateApis", authorization, async (req, res) => {
   try {
     const { a_id, Notion, Discord, Facebook, Slack } = req.body
-    //req.user has the payload
     const newApis = await pool.query("CALL updateGroupApi($1,$2,$3,$4,$5);", [a_id, Notion, Discord, Facebook, Slack])
     res.json(newApis.rows)
   } catch (err) {
@@ -89,7 +87,6 @@ router.post("/addTask", authorization, async (req, res) => {
   try {
     const { taskContent, userId, groupId } = req.body
 
-    //req.user has the payload
     const task = await pool.query("CALL addTask($1,$3, $2);", [taskContent, userId, groupId])
     res.json(task.rows)
   } catch (err) {
@@ -100,7 +97,6 @@ router.post("/addTask", authorization, async (req, res) => {
 router.get("/getTasks", authorization, async (req, res) => {
   try {
     const groupId = req.header("groupId")
-    //req.user has the payload
     const tasks = await pool.query("SELECT t.content, t.complete,tgu.user_id,t.task_id FROM tasks_group_user AS tgu JOIN tasks as t ON t.task_id = tgu.task_id WHERE group_id = $1;", [groupId])
     res.json(tasks.rows)
   } catch (err) {
