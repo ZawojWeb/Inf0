@@ -76,6 +76,9 @@ CALL createGroup(1,'Group1123');
 
 
 
+
+
+
 CREATE OR REPLACE FUNCTION  getUserGroups(user_id INT) 
     RETURNS table (name VARCHAR(255), group_id INT, privilege privileges) 
      LANGUAGE plpgsql AS
@@ -115,3 +118,20 @@ CREATE OR REPLACE FUNCTION getGroupPrivilage(group_id INT,group_id INT)
         
     END
     $$;
+
+
+
+CREATE PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges)
+    LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        u_id INT; 
+    BEGIN
+        SELECT user_id INTO u_id FROM Users WHERE mail = Inmail;
+        INSERT INTO User_Group (user_id,group_id,privilege) VALUES (u_id,group_id,privilege);
+    END
+    $$;
+
+DROP PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges);
+
+CALL addUser(16,'zawoj11.sms@gmail.com', 'user');

@@ -40,7 +40,7 @@ function Login() {
           progress: undefined,
         })
         setTimeout(() => {
-          router.push("/Dashboard")
+          router.push("/Groups")
         }, 2000)
       } else {
         toast.error("Hasło lub email nieprawidłowy", {

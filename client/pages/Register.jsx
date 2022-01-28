@@ -71,7 +71,7 @@ function Register() {
           progress: undefined,
         })
         setTimeout(() => {
-          router.push("/Dashboard")
+          router.push("/Groups")
         }, 2000)
       } else {
         console.log(parseResponse)
