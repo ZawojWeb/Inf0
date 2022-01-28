@@ -96,3 +96,22 @@ CREATE OR REPLACE FUNCTION  getUserGroups(user_id INT)
 
 
 SELECT * FROM public.getUserGroups(1);
+
+
+CREATE OR REPLACE FUNCTION getGroupPrivilage(group_id INT,group_id INT)
+    RETURNS table (name VARCHAR(255), group_id INT, privilege privileges) 
+     LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        u_id INT := user_id; 
+        g_id INT := group_id; 
+    BEGIN
+        RETURN query 
+            SELECT g.name, g.group_id,ug.privilege
+            FROM Groups AS g
+            JOIN User_Group AS ug
+            ON g.group_id = ug.group_id
+            WHERE ug.user_id = u_id;
+        
+    END
+    $$;

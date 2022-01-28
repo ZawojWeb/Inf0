@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
-import YouHaveToLogin from "../components/youHaveToLogin"
-import AppNav from "../components/AppNav"
-import Groups from "../components/Groups"
-const Dashboard = () => {
+import YouHaveToLogin from "../../components/youHaveToLogin"
+import AppNav from "../../components/AppNav"
+import Groups from "../../components/Groups"
+const Dashboard = ({ params }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean)
