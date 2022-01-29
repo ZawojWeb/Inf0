@@ -28,14 +28,7 @@ const GroupView = ({ id, userId }) => {
 
   useEffect(() => {})
 
-  return (
-    <div>
-      <h1>Group ID: {id}</h1>
-      <h1>User ID: {userId}</h1>
-      <h2>Privilage: {privilage}</h2>
-      {privilage.length > 0 && privilage == "admin" ? <AdminView groupId={id} userId={userId} /> : privilage == "editor" ? <EditorView /> : <UserView />}
-    </div>
-  )
+  return <div>{privilage.length > 0 && privilage == "admin" ? <AdminView groupId={id} userId={userId} /> : privilage == "editor" ? <EditorView /> : <UserView />}</div>
 }
 
 export default GroupView
