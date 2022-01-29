@@ -4,12 +4,11 @@ import Popup from "reactjs-popup"
 import SingleUserInList from "./SingleUserInList"
 import "reactjs-popup/dist/index.css"
 import "react-toastify/dist/ReactToastify.css"
-const UserGroupList = ({ groupId }) => {
+const UserGroupList = ({ groupId, setUserList, userList }) => {
   const [inputs, setInputs] = useState({
     userEmail: "",
     privilege: "",
   })
-  const [userList, setUserList] = useState([""])
 
   const { userEmail, privilege } = inputs
 
@@ -115,7 +114,7 @@ const UserGroupList = ({ groupId }) => {
                 <input onChange={(e) => onChange(e)} value={userEmail} name='userEmail' className='w-full pr-6 pl-4 py-4 font-bold placeholder-gray-200 rounded-r-full focus:outline-none' type='email' placeholder='User Email' />
               </div>
               <div className='flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full'>
-                <select name='pets' id='pet-select' onChange={(e) => onChange(e)} value={privilege} name='privilege'>
+                <select name='privilege' id='pet-select' onChange={(e) => onChange(e)} value={privilege} name='privilege'>
                   <option value=''>--Wybierz role--</option>
                   <option value='editor'>Edytor</option>
                   <option value='user'>User</option>

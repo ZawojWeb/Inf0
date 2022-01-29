@@ -156,3 +156,43 @@ CREATE OR REPLACE FUNCTION getGroupApi(group_id INT)
         
     END
     $$;
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE addTask(taskContnt VARCHAR(255), g_id INT, u_id INT)
+    LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        t_id INT; 
+    BEGIN
+        INSERT INTO tasks (content,complete) VALUES (taskContnt,0) RETURNING task_id INTO  t_id;
+        INSERT INTO tasks_group_user (task_id,group_id,user_id) VALUES (t_id,g_id,u_id);
+    END
+    $$;
+
+DROP PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges);
+
+CALL addTask('Umyj uszy',26, 2);
+
+
+CREATE OR REPLACE FUNCTION getTasks(group_id INT)
+    RETURNS table (content VARCHAR(255), complete INT, user_id INT) 
+     LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        g_id INT := group_id; 
+    BEGIN
+        RETURN query 
+            SELECT t.content, t.complete,tgu.user_id FROM tasks_group_user AS tgu JOIN tasks as t ON t.task_id = tgu.task_id WHERE group_id = g_id ;
+        
+    END
+    $$;
+
+
+SELECT * FROM public.getTasks(26);
