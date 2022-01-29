@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react"
-import "reactjs-popup/dist/index.css"
-import Popup from "reactjs-popup"
 import { ToastContainer, toast } from "react-toastify"
+import Popup from "reactjs-popup"
+import SingleUserInList from "./SingleUserInList"
+import "reactjs-popup/dist/index.css"
 import "react-toastify/dist/ReactToastify.css"
 const UserGroupList = ({ groupId }) => {
   const [inputs, setInputs] = useState({
     userEmail: "",
     privilege: "",
   })
-  const [userList, setUserList] = useState([])
+  const [userList, setUserList] = useState([""])
 
   const { userEmail, privilege } = inputs
 
@@ -18,42 +19,55 @@ const UserGroupList = ({ groupId }) => {
 
   const onSubmitForm = async (e) => {
     e.preventDefault()
-
-    try {
-      const body = { userEmail, privilege, groupId }
-      const response = await fetch("http://localhost:5000/group/addUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", token: localStorage.token },
-        body: JSON.stringify(body),
+    const emailIsInArray = userList.find((user) => user.mail == userEmail)
+    if (emailIsInArray) {
+      toast.error("Użytkownik z tym mailem już jest na liście", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       })
+    } else {
+      try {
+        const body = { userEmail, privilege, groupId }
+        const response = await fetch("http://localhost:5000/group/addUser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", token: localStorage.token },
+          body: JSON.stringify(body),
+        })
 
-      const parseResponse = await response.json()
-      if (parseResponse == 0) {
-        toast.error("Nie ma użytkownika z takim mailem", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } else {
-        toast.success("Dodano nowego usera", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-        setInputs({
-          userEmail: "",
-          privilege: "",
-        })
-      }
-    } catch (error) {}
+        const parseResponse = await response.json()
+        if (parseResponse == 0) {
+          toast.error("Nie ma użytkownika z takim mailem", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        } else {
+          toast.success("Dodano nowego usera", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+          setInputs({
+            userEmail: "",
+            privilege: "",
+          })
+          getUsers()
+        }
+      } catch (error) {}
+    }
   }
 
   async function getUsers() {
@@ -73,7 +87,7 @@ const UserGroupList = ({ groupId }) => {
   }, [groupId, userList.length])
 
   return (
-    <div className='basis-1/3 h-screen bg-blue-100 '>
+    <div className='basis-1/3 h-screen bg-blue-100 flex flex-col'>
       <Popup
         className='max-w-xs'
         trigger={
@@ -115,10 +129,18 @@ const UserGroupList = ({ groupId }) => {
         </div>
       </Popup>
       <ToastContainer theme='colored' position='top-right' autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-      <div>
+      <div className='flex items-center flex-col'>
         {userList.length > 0 &&
           userList.map((user) => {
-            return <div>{user.user_id}</div>
+            return user.privilege == "admin" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} />
+          })}
+        {userList.length > 0 &&
+          userList.map((user) => {
+            return user.privilege == "editor" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} />
+          })}
+        {userList.length > 0 &&
+          userList.map((user) => {
+            return user.privilege == "user" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} />
           })}
       </div>
     </div>

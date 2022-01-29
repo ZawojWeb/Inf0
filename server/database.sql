@@ -64,9 +64,13 @@ CREATE PROCEDURE createGroup(user_id INT,group_name VARCHAR(255))
     $$
     DECLARE 
         g_id INT; 
+        a_id INT; 
     BEGIN
         INSERT INTO Groups (name) VALUES (group_name) RETURNING group_id INTO  g_id ;
         INSERT INTO User_Group (user_id,group_id,privilege) VALUES (user_id,g_id,'admin');
+        INSERT INTO apiskey (notionapikey,discordapikey,facebookapikey,slackapikey) VALUES ('','','','') RETURNING apis_id INTO  a_id;
+        INSERT INTO apis_groups (apis_id,group_id) VALUES (a_id,g_id);
+
     END
     $$;
 
@@ -101,25 +105,6 @@ CREATE OR REPLACE FUNCTION  getUserGroups(user_id INT)
 SELECT * FROM public.getUserGroups(1);
 
 
-CREATE OR REPLACE FUNCTION getGroupPrivilage(group_id INT,group_id INT)
-    RETURNS table (name VARCHAR(255), group_id INT, privilege privileges) 
-     LANGUAGE plpgsql AS
-    $$
-    DECLARE 
-        u_id INT := user_id; 
-        g_id INT := group_id; 
-    BEGIN
-        RETURN query 
-            SELECT g.name, g.group_id,ug.privilege
-            FROM Groups AS g
-            JOIN User_Group AS ug
-            ON g.group_id = ug.group_id
-            WHERE ug.user_id = u_id;
-        
-    END
-    $$;
-
-
 
 CREATE PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges)
     LANGUAGE plpgsql AS
@@ -135,3 +120,39 @@ CREATE PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges)
 DROP PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges);
 
 CALL addUser(16,'zawoj11.sms@gmail.com', 'user');
+
+
+
+
+
+
+
+
+CREATE PROCEDURE updateGroupApi(a_id INT,Notion VARCHAR(255),Discord VARCHAR(255),Facebook VARCHAR(255),Slack VARCHAR(255))
+    LANGUAGE plpgsql AS
+    $$
+    BEGIN
+        UPDATE apiskey SET notionapikey = Notion,discordapikey = Discord,facebookapikey = Facebook,slackapikey = Slack WHERE apis_id = a_id;
+    END
+    $$;
+
+DROP PROCEDURE updateGroupApi((a_id INT,Notion VARCHAR(255),Discord VARCHAR(255),Facebook VARCHAR(255),Slack VARCHAR(255));
+
+CALL updateGroupApi(1,' ',' ',' ','daklsdhkla2');
+
+
+
+
+
+CREATE OR REPLACE FUNCTION getGroupApi(group_id INT)
+    RETURNS table (apis_id INT) 
+     LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        g_id INT := group_id; 
+    BEGIN
+        RETURN query 
+            SELECT apis_id FROM apis_groups WHERE group_id = g_id ;
+        
+    END
+    $$;

@@ -59,11 +59,7 @@ const Tabs = ({ tabsName, components }) => {
                 {components[1]}
               </div>
               <div className={openTab === 3 ? "block" : "hidden"} id='link3'>
-                <p>
-                  Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
-                  <br />
-                  <br /> Dramatically maintain clicks-and-mortar solutions without functional solutions.
-                </p>
+                {components[2]}
               </div>
             </div>
           </div>

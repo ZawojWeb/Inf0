@@ -45,10 +45,44 @@ router.get("/privilege", authorization, async (req, res) => {
 router.get("/getUsers", authorization, async (req, res) => {
   try {
     const groupId = req.header("groupid")
-    const users = await pool.query("SELECT * FROM user_group WHERE group_id = $1", [groupId])
+    const users = await pool.query("SELECT ug.user_id,ug.privilege, u.nickname, u.mail FROM user_group as ug JOIN Users as u ON u.user_id = ug.user_id WHERE ug.group_id = $1;", [groupId])
     res.json(users.rows)
   } catch (err) {
     res.status(500).json("Server Error")
   }
 })
+router.delete("/deleteUser", authorization, async (req, res) => {
+  try {
+    const groupId = req.header("groupid")
+    const userId = req.header("userId")
+    const users = await pool.query("DELETE FROM user_group WHERE user_id = $1 AND group_id = $2", [userId, groupId])
+    res.json(users.rows)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
+
+router.get("/getUpis", authorization, async (req, res) => {
+  try {
+    const groupId = req.header("groupId")
+
+    //req.user has the payload
+    const apiId = await pool.query("SELECT ag.apis_id, a.discordapikey,a.notionapikey,a.facebookapikey,a.slackapikey FROM apis_groups as ag JOIN apiskey as a ON ag.apis_id = a.apis_id  WHERE group_id = $1 ", [groupId])
+    res.json(apiId.rows)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
+
+router.post("/updateApis", authorization, async (req, res) => {
+  try {
+    const { a_id, Notion, Discord, Facebook, Slack } = req.body
+    //req.user has the payload
+    const newApis = await pool.query("CALL updateGroupApi($1,$2,$3,$4,$5);", [a_id, Notion, Discord, Facebook, Slack])
+    res.json(newApis.rows)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
+
 module.exports = router

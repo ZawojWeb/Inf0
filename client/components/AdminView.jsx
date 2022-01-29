@@ -3,10 +3,11 @@ import Tabs from "./Tabs"
 import TasksComponent from "./TasksComponent"
 import ChatComponent from "./ChatComponent"
 import UserGroupList from "./UserGroupList"
+import ApisForm from "./ApisForm"
 
 const AdminView = ({ groupId, userId }) => {
   const tabsName = ["Messages", "Tasks", "APIs"]
-  const components = [<ChatComponent />, <TasksComponent />, "APIsCompoent"]
+  const components = [<ChatComponent />, <TasksComponent />, <ApisForm groupId={groupId} />]
 
   return (
     <div className='flex flex-row'>
