@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react"
-import Collapsible from "react-collapsible"
+import SingleTask from "./SingleTask"
 import "reactjs-popup/dist/index.css"
 import Popup from "reactjs-popup"
-
+import Collapsible from "react-collapsible"
 const TasksComponent = () => {
   const [inputs, setInputs] = useState({
     taskContent: "",
   })
+
+  const tasksList = {}
   return (
     <>
       <Popup
@@ -30,11 +32,23 @@ const TasksComponent = () => {
       >
         Hejo
       </Popup>
-      <Collapsible className='bg-blue-500' openedClassName='bg-blue-500' trigger='UserName'>
-        <div>
-          <h1>Task Name</h1>
-        </div>
-      </Collapsible>
+
+      <div className='my-8 drop-shadow-xl'>
+        <Collapsible className='drop-shadow-xl' openedclassName='drop-shadow-xl' trigger={"Lena"}>
+          <div className='flex flex-col '>
+            <SingleTask taskContnt={"Umyj uszy"} progress={0} />
+            <SingleTask taskContnt={"Dupa uszy"} progress={0} />
+          </div>
+        </Collapsible>
+      </div>
+      <div className='my-8'>
+        <Collapsible className='drop-shadow-md' openedclassName='drop-shadow-xl' trigger={"Lena"}>
+          <div className='flex flex-col '>
+            <SingleTask taskContnt={"Umyj uszy"} progress={0} />
+            <SingleTask taskContnt={"Dupa uszy"} progress={0} />
+          </div>
+        </Collapsible>
+      </div>
     </>
   )
 }
