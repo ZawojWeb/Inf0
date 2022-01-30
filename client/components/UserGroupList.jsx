@@ -4,7 +4,7 @@ import Popup from "reactjs-popup"
 import SingleUserInList from "./SingleUserInList"
 import "reactjs-popup/dist/index.css"
 import "react-toastify/dist/ReactToastify.css"
-const UserGroupList = ({ groupId, setUserList, userList }) => {
+const UserGroupList = ({ groupId, setUserList, userList, userPrivilage }) => {
   const [inputs, setInputs] = useState({
     userEmail: "",
     privilege: "",
@@ -86,60 +86,64 @@ const UserGroupList = ({ groupId, setUserList, userList }) => {
   }, [groupId, userList.length])
 
   return (
-    <div className='basis-1/3 h-screen bg-blue-100 flex flex-col'>
-      <Popup
-        className='max-w-xs'
-        trigger={
-          <a
-            data-section-id='1'
-            data-category='__elements'
-            data-component-id='fa131f65_04_awz'
-            className='text-center inline-block py-2 px-10 my-10 mx-auto text-xl leading-6 text-white font-medium tracking-tighter font-heading bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl'
-            href='#'
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            data-config-id='04_button'
-          >
-            Add User
-          </a>
-        }
-        modal
-      >
-        <div className='w-full px-10'>
-          <div className='px-6 lg:px-20 py-12 lg:py-24 bg-white shadow-2xl rounded-lg'>
-            <form action='#'>
-              <h3 className='mb-10 text-2xl font-bold font-heading'></h3>
-              <div className='flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full'>
-                <input onChange={(e) => onChange(e)} value={userEmail} name='userEmail' className='w-full pr-6 pl-4 py-4 font-bold placeholder-gray-200 rounded-r-full focus:outline-none' type='email' placeholder='User Email' />
-              </div>
-              <div className='flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full'>
-                <select name='privilege' id='pet-select' onChange={(e) => onChange(e)} value={privilege} name='privilege'>
-                  <option value=''>--Wybierz role--</option>
-                  <option value='editor'>Edytor</option>
-                  <option value='user'>User</option>
-                </select>
-              </div>
-              <button onClick={onSubmitForm} className='py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200'>
-                Add User
-              </button>
-            </form>
+    <div className={`basis-1/3 h-screen bg-blue-100 flex flex-col ${userPrivilage != "admin" ? "pt-20" : ""} `}>
+      {userPrivilage == "admin" && (
+        <Popup
+          className='max-w-xs'
+          trigger={
+            <a
+              data-section-id='1'
+              data-category='__elements'
+              data-component-id='fa131f65_04_awz'
+              className='text-center inline-block py-2 px-10 my-10 mx-auto text-xl leading-6 text-white font-medium tracking-tighter font-heading bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl'
+              href='#'
+              onClick={(e) => {
+                e.preventDefault()
+              }}
+              data-config-id='04_button'
+            >
+              Add User
+            </a>
+          }
+          modal
+        >
+          <div className='w-full px-10'>
+            <div className='px-6 lg:px-20 py-12 lg:py-24 bg-white shadow-2xl rounded-lg'>
+              <form action='#'>
+                <h3 className='mb-10 text-2xl font-bold font-heading'></h3>
+                <div className='flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full'>
+                  <input onChange={(e) => onChange(e)} value={userEmail} name='userEmail' className='w-full pr-6 pl-4 py-4 font-bold placeholder-gray-200 rounded-r-full focus:outline-none' type='email' placeholder='User Email' />
+                </div>
+                <div className='flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full'>
+                  <select name='privilege' id='pet-select' onChange={(e) => onChange(e)} value={privilege} name='privilege'>
+                    <option value=''>--Wybierz role--</option>
+                    <option value='editor'>Edytor</option>
+                    <option value='user'>User</option>
+                  </select>
+                </div>
+
+                <button onClick={onSubmitForm} className='py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200'>
+                  Add User
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      </Popup>
+        </Popup>
+      )}
+
       <ToastContainer theme='colored' position='top-right' autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <div className='flex items-center flex-col'>
         {userList.length > 0 &&
           userList.map((user) => {
-            return user.privilege == "admin" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} />
+            return user.privilege == "admin" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} userPrivilage={userPrivilage} />
           })}
         {userList.length > 0 &&
           userList.map((user) => {
-            return user.privilege == "editor" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} />
+            return user.privilege == "editor" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} userPrivilage={userPrivilage} />
           })}
         {userList.length > 0 &&
           userList.map((user) => {
-            return user.privilege == "user" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} />
+            return user.privilege == "user" && <SingleUserInList groupId={groupId} userId={user.user_id} nickname={user.nickname} mail={user.mail} privilege={user.privilege} setUserList={setUserList} userList={userList} userPrivilage={userPrivilage} />
           })}
       </div>
     </div>

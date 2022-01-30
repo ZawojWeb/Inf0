@@ -27,7 +27,6 @@ function Login() {
         body: JSON.stringify(body),
       })
       const parseRes = await response.json()
-      console.log(parseRes)
       if (parseRes.token) {
         localStorage.setItem("token", parseRes.token)
         toast.success("Udało się zalogować zaraz zostaniesz przekierowany", {

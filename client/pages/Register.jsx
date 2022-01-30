@@ -74,7 +74,6 @@ function Register() {
           router.push("/Groups")
         }, 2000)
       } else {
-        console.log(parseResponse)
         toast.error(`${parseResponse}`, {
           position: "top-right",
           autoClose: 2000,

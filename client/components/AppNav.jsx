@@ -41,7 +41,13 @@ const AppNav = () => {
       <nav className='flex justify-between px-6 lg:px-12 py-8'>
         <div className='flex w-full items-center justify-between'>
           <div className='flex items-center'>
-            <a href='#'>
+            <a
+              onClick={(e) => {
+                e.preventDefault()
+                router.push("/Groups")
+              }}
+              href='/Groups'
+            >
               <img className='h-12' src='/assets/uinel-assets/logos/uinel-gray-white.svg' alt='' />
             </a>
           </div>

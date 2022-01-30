@@ -34,20 +34,22 @@ const Tabs = ({ tabsName, components }) => {
               {tabsName[1]}
             </a>
           </li>
-          <li className='-mb-px mr-2 last:mr-0 flex-auto text-center'>
-            <a
-              className={"text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " + (openTab === 3 ? "text-white bg-blue-500" : "text-blue-500 bg-white")}
-              onClick={(e) => {
-                e.preventDefault()
-                setOpenTab(3)
-              }}
-              data-toggle='tab'
-              href='#link3'
-              role='tablist'
-            >
-              {tabsName[2]}
-            </a>
-          </li>
+          {tabsName[2] != null && (
+            <li className='-mb-px mr-2 last:mr-0 flex-auto text-center'>
+              <a
+                className={"text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " + (openTab === 3 ? "text-white bg-blue-500" : "text-blue-500 bg-white")}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setOpenTab(3)
+                }}
+                data-toggle='tab'
+                href='#link3'
+                role='tablist'
+              >
+                {tabsName[2]}
+              </a>
+            </li>
+          )}
         </ul>
         <div className='relative flex flex-col min-w-0 break-words bg-white w-full mb-6 rounded'>
           <div className='px-4 py-5 flex-auto'>

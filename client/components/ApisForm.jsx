@@ -23,7 +23,6 @@ const ApisForm = ({ groupId }) => {
       })
 
       const parseResponse = await response.json()
-      console.log(parseResponse)
       setApiID(parseResponse[0].apis_id)
       setInputs({
         Discord: parseResponse[0].discordapikey,

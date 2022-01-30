@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react"
 
-const SingleUserInList = ({ nickname, mail, privilege, groupId, userId, setUserList, userList }) => {
+const SingleUserInList = ({ nickname, mail, privilege, groupId, userId, setUserList, userList, userPrivilage, getTasks }) => {
   const deleteUser = async (groupId, userId) => {
     try {
+      window.location.reload(true)
       const response = await fetch("http://localhost:5000/group/deleteUser", {
         method: "DELETE",
         headers: { "Content-Type": "application/json", token: localStorage.token, groupId: groupId, userId: userId },
       })
 
       const parseResponse = await response.json()
-      setUserList(...userList)
     } catch (error) {}
   }
   return (
@@ -20,7 +20,7 @@ const SingleUserInList = ({ nickname, mail, privilege, groupId, userId, setUserL
         </div>
         <span className='text-gray-500/80'>{mail}</span>
       </div>
-      {privilege != "admin" && (
+      {privilege != "admin" && userPrivilage == "admin" && (
         <div
           className='w-4 cursor-pointer'
           onClick={(e) => {

@@ -8,7 +8,7 @@ const GroupView = ({ id, userId }) => {
   const [privilage, setPrivilage] = useState("")
   const [view, setView] = useState()
 
-  async function getUserPrivilage(userId) {
+  async function getUserPrivilage(id) {
     try {
       const response = await fetch("http://localhost:5000/group/privilege", {
         method: "GET",
@@ -23,12 +23,10 @@ const GroupView = ({ id, userId }) => {
   }
 
   useEffect(() => {
-    getUserPrivilage()
+    getUserPrivilage(id)
   }, [])
 
-  useEffect(() => {})
-
-  return <div>{privilage.length > 0 && privilage == "admin" ? <AdminView groupId={id} userId={userId} /> : privilage == "editor" ? <EditorView /> : <UserView />}</div>
+  return <div>{privilage.length > 0 && privilage == "admin" ? <AdminView groupId={id} userId={userId} privilage={privilage} /> : privilage == "editor" ? <EditorView groupId={id} userId={userId} privilage={privilage} /> : <UserView groupId={id} userId={userId} privilage={privilage} />}</div>
 }
 
 export default GroupView

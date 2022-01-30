@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
+import { ToastContainer, toast } from "react-toastify"
 import SingleTask from "./SingleTask"
-import "reactjs-popup/dist/index.css"
 import Popup from "reactjs-popup"
 import Collapsible from "react-collapsible"
-import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-const TasksComponent = ({ userList, groupId }) => {
+import "reactjs-popup/dist/index.css"
+const TasksComponent = ({ userList, groupId, adminId, userPrivilage }) => {
   const [inputs, setInputs] = useState({
     taskContent: "",
     userId: "",
@@ -22,7 +22,6 @@ const TasksComponent = ({ userList, groupId }) => {
 
     try {
       const body = { taskContent, userId, groupId }
-      console.log(body)
       const response = await fetch("http://localhost:5000/group/addTask", {
         method: "POST",
         headers: { "Content-Type": "application/json", token: localStorage.token },
@@ -56,7 +55,6 @@ const TasksComponent = ({ userList, groupId }) => {
 
       const parseResponse = await response.json()
       setTasksList(parseResponse)
-      console.log(tasksList)
     } catch (error) {}
   }
 
@@ -93,11 +91,18 @@ const TasksComponent = ({ userList, groupId }) => {
                 <input onChange={(e) => onChange(e)} value={taskContent} name='taskContent' className='w-full pr-6 pl-4 py-4 font-bold placeholder-gray-200 rounded-r-full focus:outline-none' type='text' placeholder='Task content' />
               </div>
               <div className='flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full'>
-                <select id='pet-select' name='userId' onChange={(e) => onChange(e)} value={userId}>
+                <select name='userId' onChange={(e) => onChange(e)} value={userId}>
                   <option value=''>--Wybierz użytkownika--</option>
                   {userList &&
+                    userPrivilage == "admin" &&
                     userList.map((user) => {
-                      return <option value={user.user_id}>{user.nickname}</option>
+                      return adminId != user.user_id && <option value={user.user_id}>{user.nickname}</option>
+                    })}
+
+                  {userList &&
+                    userPrivilage == "editor" &&
+                    userList.map((user) => {
+                      return adminId != user.user_id && user.privilege != "editor" && user.privilege != "admin" && <option value={user.user_id}>{user.nickname}</option>
                     })}
                 </select>
               </div>
@@ -112,13 +117,32 @@ const TasksComponent = ({ userList, groupId }) => {
       <div className='my-8'>
         {userList &&
           tasksList &&
+          userPrivilage == "admin" &&
           userList.map((user) => {
             return (
               user.privilege != "admin" && (
                 <Collapsible className='drop-shadow-2xl my-8' openedClassName='drop-shadow-2xl bg-white  my-8' trigger={<h1 className='bg-blue-500 font-medium text-xl  text-center text-white py-2'>{user.nickname}</h1>}>
                   <div className='flex flex-col '>
                     {tasksList.map((task) => {
-                      return task.user_id == user.user_id && <SingleTask taskId={task.task_id} taskContent={task.content} progress={task.complete} key={"Umyj uszy"} />
+                      return task.user_id == user.user_id && <SingleTask taskId={task.task_id} taskContent={task.content} progress={task.complete} key={task.task_id} getTasks={getTasks} />
+                    })}
+                  </div>
+                </Collapsible>
+              )
+            )
+          })}
+
+        {userList &&
+          tasksList &&
+          userPrivilage == "editor" &&
+          userList.map((user) => {
+            return (
+              user.privilege != "admin" &&
+              user.privilege != "editor" && (
+                <Collapsible className='drop-shadow-2xl my-8' openedClassName='drop-shadow-2xl bg-white  my-8' trigger={<h1 className='bg-blue-500 font-medium text-xl  text-center text-white py-2'>{user.nickname}</h1>}>
+                  <div className='flex flex-col '>
+                    {tasksList.map((task) => {
+                      return task.user_id == user.user_id && <SingleTask taskId={task.task_id} taskContent={task.content} progress={task.complete} key={task.task_id} />
                     })}
                   </div>
                 </Collapsible>

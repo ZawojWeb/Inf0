@@ -5,9 +5,17 @@ const authorization = require("../middleware/authorization")
 router.post("/create", authorization, async (req, res) => {
   try {
     const { user_id, groupName } = req.body
-    console.log(user_id, groupName)
-    //req.user has the payload
     const user = await pool.query("CALL createGroup($1,$2);", [user_id, groupName])
+    res.json(user.rows)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
+
+router.get("/privilege", authorization, async (req, res) => {
+  try {
+    const groupId = req.header("groupid")
+    const user = await pool.query("SELECT privilege FROM user_group WHERE user_id = $1 AND group_id = $2", [req.user, groupId])
     res.json(user.rows)
   } catch (err) {
     res.status(500).json("Server Error")
@@ -32,16 +40,6 @@ router.post("/addUser", authorization, async (req, res) => {
   }
 })
 
-router.get("/privilege", authorization, async (req, res) => {
-  try {
-    const groupId = req.header("groupid")
-    const user = await pool.query("SELECT privilege FROM user_group WHERE user_id = $1 AND group_id = $2", [req.user, groupId])
-    res.json(user.rows)
-  } catch (err) {
-    res.status(500).json("Server Error")
-  }
-})
-
 router.get("/getUsers", authorization, async (req, res) => {
   try {
     const groupId = req.header("groupid")
@@ -55,7 +53,7 @@ router.delete("/deleteUser", authorization, async (req, res) => {
   try {
     const groupId = req.header("groupid")
     const userId = req.header("userId")
-    const users = await pool.query("DELETE FROM user_group WHERE user_id = $1 AND group_id = $2", [userId, groupId])
+    const users = await pool.query("CALL deleteUserGroup($1,$2);", [userId, groupId])
     res.json(users.rows)
   } catch (err) {
     res.status(500).json("Server Error")
@@ -99,6 +97,37 @@ router.get("/getTasks", authorization, async (req, res) => {
     const groupId = req.header("groupId")
     const tasks = await pool.query("SELECT t.content, t.complete,tgu.user_id,t.task_id FROM tasks_group_user AS tgu JOIN tasks as t ON t.task_id = tgu.task_id WHERE group_id = $1;", [groupId])
     res.json(tasks.rows)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
+
+router.get("/getUserTask", authorization, async (req, res) => {
+  try {
+    const userId = req.header("userId")
+    const tasks = await pool.query("SELECT t.content, t.complete,tgu.user_id,t.task_id FROM tasks_group_user AS tgu JOIN tasks as t ON t.task_id = tgu.task_id WHERE tgu.user_id = $1;", [userId])
+    res.json(tasks.rows)
+  } catch (err) {
+    res.status(500).json([])
+  }
+})
+
+router.post("/updateProgres", authorization, async (req, res) => {
+  try {
+    const taskId = req.header("taskId")
+    const progresState = req.header("progresState")
+    const task = await pool.query(" UPDATE tasks SET complete = $1 WHERE task_id = $2", [progresState, taskId])
+    res.json(task.rows)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
+
+router.delete("/deleteTask", authorization, async (req, res) => {
+  try {
+    const taskId = req.header("taskId")
+    const users = await pool.query("CALL deleteTask($1);", [taskId])
+    res.json(users.rows)
   } catch (err) {
     res.status(500).json("Server Error")
   }

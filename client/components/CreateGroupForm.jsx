@@ -20,7 +20,6 @@ const CreateGroupForm = ({ userId, setGroups, groups }) => {
 
     try {
       const body = { user_id, groupName }
-      console.log(body)
 
       const response = await fetch("http://localhost:5000/group/create", {
         method: "POST",

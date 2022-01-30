@@ -120,9 +120,30 @@ CREATE PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges)
 DROP PROCEDURE addUser(group_id INT,Inmail VARCHAR(255),privilege privileges);
 
 CALL addUser(16,'zawoj11.sms@gmail.com', 'user');
+            -- SELECT task_id INTO currTask FROM tasks_group_user WHERE user_id = userId AND group_id = groupId LIMIT 1
+            
 
+CREATE PROCEDURE deleteUserGroup(userId INT,groupId INT)
+    LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        howmany INT; 
+        currTask INT; 
+    BEGIN
+        DELETE FROM user_group WHERE user_id = userId AND group_id = groupId;
+        SELECT COUNT(*) INTO howmany FROM tasks_group_user WHERE user_id = userId AND group_id = groupId GROUP BY user_id;
+        
+        WHILE howmany > 0 loop
+            DELETE FROM tasks_group_user WHERE task_id = (SELECT task_id  FROM tasks_group_user WHERE user_id = userId AND group_id = groupId LIMIT 1) RETURNING task_id INTO currTask;
+            DELETE FROM tasks WHERE task_id = currTask;
+            howmany := howmany - 1;
+        end loop;
+        
+    END
+    $$;
 
-
+DROP PROCEDURE deleteUserGroup(userId INT,groupId INT);
+CALL deleteUserGroup(2,27);
 
 
 
@@ -196,3 +217,15 @@ CREATE OR REPLACE FUNCTION getTasks(group_id INT)
 
 
 SELECT * FROM public.getTasks(26);
+
+
+CREATE PROCEDURE deleteTask( taskId INT)
+    LANGUAGE plpgsql AS
+    $$
+    BEGIN
+        DELETE FROM tasks_group_user WHERE task_id = taskId;
+        DELETE FROM tasks WHERE task_id = taskId;
+    END
+    $$;
+DROP PROCEDURE deleteTask( taskId INT);
+

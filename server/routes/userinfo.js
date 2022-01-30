@@ -15,7 +15,6 @@ router.get("/", authorization, async (req, res) => {
 router.get("/groups", authorization, async (req, res) => {
   try {
     const userId = req.header("userId")
-    console.log(userId)
     //req.user has the payload
     const user = await pool.query("SELECT * FROM public.getUserGroups($1)", [userId])
     res.json(user.rows)
