@@ -9,7 +9,7 @@ const UserView = ({ groupId, userId, privilage }) => {
   const [userList, setUserList] = useState([""])
   const tabsName = ["Messages", "My tasks"]
 
-  const components = [<ChatComponent />, <MyTasks currentUser={userId} privilage={privilage} />]
+  const components = [<ChatComponent groupId={groupId} />, <MyTasks currentUser={userId} privilage={privilage} groupId={groupId} userId={userId} />]
   return (
     <div className='flex flex-row'>
       <Tabs className='basis-2/3 p-8' tabsName={tabsName} components={components} />

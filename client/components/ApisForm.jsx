@@ -35,7 +35,7 @@ const ApisForm = ({ groupId }) => {
 
   async function updateApis(a_id) {
     try {
-      const body = { a_id, Notion, Discord, Facebook, Slack }
+      const body = { a_id, Notion, Discord, Facebook, Slack, groupId }
       const response = await fetch("http://localhost:5000/group/updateApis", {
         method: "POST",
         headers: { "Content-Type": "application/json", token: localStorage.token },

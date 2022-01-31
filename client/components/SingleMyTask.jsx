@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
-const SingleMyTask = ({ userName, taskContent, progress, taskId }) => {
+const SingleMyTask = ({ userId, taskContent, progress, taskId, groupId }) => {
   const [progresState, setProgresState] = useState(progress)
 
   const changeProgress = async (tId, progresState) => {
     try {
       const response = await fetch("http://localhost:5000/group/updateProgres", {
         method: "POST",
-        headers: { "Content-Type": "application/json", token: localStorage.token, taskId: tId, progresState: progresState },
+        headers: { "Content-Type": "application/json", token: localStorage.token, taskId: tId, progresState: progresState, taskName: taskContent, userId: userId, groupId: groupId },
       })
 
       const parseResponse = await response.json()

@@ -23,13 +23,15 @@ CREATE TABLE User_Group(
 CREATE TABLE Messages(
     message_id SERIAL PRIMARY KEY,
     content VARCHAR(255) NOT NULL,
-    sendDate DATE NOT NULL
+    sendTime TIME DEFAULT CURRENT_TIME,
+    sendDate DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE Messages_Group(
     message_id INT REFERENCES Messages (message_id),
     group_id INT REFERENCES Groups (group_id)
 );
+DROP TABLE Messages_Group;
 
 
 CREATE TABLE APIsKey(
@@ -228,4 +230,22 @@ CREATE PROCEDURE deleteTask( taskId INT)
     END
     $$;
 DROP PROCEDURE deleteTask( taskId INT);
+
+
+
+
+
+CREATE PROCEDURE createMessage(groupId INT,contentLog VARCHAR(255))
+    LANGUAGE plpgsql AS
+    $$
+    DECLARE 
+        m_id INT; 
+    BEGIN
+        INSERT INTO messages (content) VALUES (contentLog) RETURNING message_id INTO  m_id ;
+        INSERT INTO messages_group (message_id,group_id) VALUES (m_id,groupId);
+    END
+    $$;
+CALL createMessage(26, 'message');
+
+
 

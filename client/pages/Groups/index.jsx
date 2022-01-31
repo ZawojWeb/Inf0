@@ -28,11 +28,11 @@ const Dashboard = ({ params }) => {
   })
 
   return (
-    <section>
+    <div>
       {isAuthenticated && <AppNav />}
       {isAuthenticated && <Groups />}
       {!isAuthenticated && <YouHaveToLogin />}
-    </section>
+    </div>
   )
 }
 

@@ -9,7 +9,7 @@ const EditorView = ({ groupId, userId, privilage }) => {
   const [userList, setUserList] = useState([""])
   const tabsName = ["Messages", "Set tasks", "My tasks"]
   console.log(userId)
-  const components = [<ChatComponent />, <TasksComponent adminId={userId} userList={userList} groupId={groupId} userPrivilage={privilage} />, <MyTasks currentUser={userId} privilage={privilage} />]
+  const components = [<ChatComponent groupId={groupId} />, <TasksComponent adminId={userId} userList={userList} groupId={groupId} userPrivilage={privilage} />, <MyTasks currentUser={userId} privilage={privilage} userId={userId} groupId={groupId} />]
   return (
     <div className='flex flex-row'>
       <Tabs className='basis-2/3 p-8' tabsName={tabsName} components={components} />

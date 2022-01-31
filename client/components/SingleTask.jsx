@@ -5,7 +5,7 @@ const SingleTask = ({ userName, taskContent, progress, taskId, getTasks }) => {
       console.log("object")
       const response = await fetch("http://localhost:5000/group/deleteTask", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", token: localStorage.token, taskId: taskId },
+        headers: { "Content-Type": "application/json", token: localStorage.token, taskId: taskId, taskName: taskContent },
       })
 
       const parseResponse = await response.json()

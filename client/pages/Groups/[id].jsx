@@ -30,7 +30,7 @@ const Group = ({ id }) => {
     getData()
   })
   return (
-    <section>
+    <section style={{ overflow: "hidden", maxHeight: "100vh" }}>
       {isAuthenticated && <AppNav />}
       {isAuthenticated && <GroupView id={id} userId={userId} />}
       {!isAuthenticated && <YouHaveToLogin />}
