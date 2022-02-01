@@ -33,18 +33,20 @@ const SingleGroup = ({ name, privilege, id, setGroups }) => {
           </div>
         </div>
         <div className='flex flex-wrap justify-around py-5 px-8'>
-          <div className='w-full md:max-w-max'>
-            <a
-              className='block py-4 px-2 w-full text-lg leading-3 text-white font-medium tracking-tighter font-heading text-center bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-xl'
-              onClick={(e) => {
-                e.preventDefault()
-                deleteGroup()
-              }}
-              href={`/Groups/${id}`}
-            >
-              Usuń grupę
-            </a>
-          </div>
+          {privilege == "admin" && (
+            <div className='w-full md:max-w-max'>
+              <a
+                className='block py-4 px-2 w-full text-lg leading-3 text-white font-medium tracking-tighter font-heading text-center bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-xl'
+                onClick={(e) => {
+                  e.preventDefault()
+                  deleteGroup()
+                }}
+                href={`/Groups/${id}`}
+              >
+                Usuń grupę
+              </a>
+            </div>
+          )}
           <div className='w-full md:max-w-max'>
             <a
               className='block py-4 px-7 w-full text-lg leading-3 text-white font-medium tracking-tighter font-heading text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl'
