@@ -1,9 +1,18 @@
 import React from "react"
 import { useRouter } from "next/router"
 
-const SingleGroup = ({ name, privilege, id }) => {
+const SingleGroup = ({ name, privilege, id, setGroups }) => {
   const router = useRouter()
-
+  const deleteGroup = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/group/deleteGroup", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", token: localStorage.token, groupId: id },
+      })
+      const parseResponse = await response.json()
+      setGroups([])
+    } catch (error) {}
+  }
   return (
     <div className='w-full sm:w-1/2 lg:w-1/3 px-4 md:px-6 lg:px-8'>
       <div className='relative pt-4 bg-white rounded-2xl shadow-6xl'>
@@ -23,16 +32,18 @@ const SingleGroup = ({ name, privilege, id }) => {
             <div className='inline-block px-6 py-1 leading-7 font-bold tracking-tight text-blue-500 bg-indigo-100 rounded-9xl'>{privilege}</div>
           </div>
         </div>
-        <div className='flex flex-wrap justify-between py-5 px-8'>
-          <div className='w-full md:w-1/2'>
-            <div className='flex flex-wrap items-center mb-6 md:mb-0'>
-              <img src='/assets/uinel-assets/images/dashboard-content/av1.png' alt='' />
-              <img className='-ml-4' src='/assets/uinel-assets/images/dashboard-content/av2.png' alt='' />
-              <div className='relative flex justify-center items-center'>
-                <span className='absolute left-1 text-sm font-heading font-semibold'>+3</span>
-                <img className='relative' src='/assets/uinel-assets/elements/dashboard-content/dots.svg' alt='' />
-              </div>
-            </div>
+        <div className='flex flex-wrap justify-around py-5 px-8'>
+          <div className='w-full md:max-w-max'>
+            <a
+              className='block py-4 px-2 w-full text-lg leading-3 text-white font-medium tracking-tighter font-heading text-center bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-xl'
+              onClick={(e) => {
+                e.preventDefault()
+                deleteGroup()
+              }}
+              href={`/Groups/${id}`}
+            >
+              Usuń grupę
+            </a>
           </div>
           <div className='w-full md:max-w-max'>
             <a

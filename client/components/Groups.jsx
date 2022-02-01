@@ -20,7 +20,7 @@ const Groups = () => {
     }
   }
 
-  async function getUserGrups(userId) {
+  const getUserGrups = async (userId) => {
     try {
       const response = await fetch("http://localhost:5000/userinfo/groups", {
         method: "GET",
@@ -51,7 +51,7 @@ const Groups = () => {
         <div className='flex flex-wrap -mx-4 md:-mx-6 lg:-mx-8'>
           {groups.length > 0 &&
             groups.map((group) => {
-              return <GroupCard name={group.name} privilege={group.privilege} id={group.group_id} key={group.group_id} />
+              return <GroupCard name={group.name} privilege={group.privilege} id={group.group_id} key={group.group_id} setGroups={setGroups} />
             })}
         </div>
       </div>

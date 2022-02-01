@@ -249,3 +249,17 @@ CALL createMessage(26, 'message');
 
 
 
+
+CREATE PROCEDURE deleteGroup( groupId INT)
+    LANGUAGE plpgsql AS
+    $$
+    BEGIN
+        DELETE FROM apis_groups WHERE group_id = groupId;
+        DELETE FROM messages_group WHERE group_id = groupId;
+        DELETE FROM tasks_group_user WHERE group_id = groupId;
+        DELETE FROM user_group WHERE group_id = groupId;
+        DELETE FROM groups WHERE group_id = groupId;
+    END
+    $$;
+DROP PROCEDURE deleteGroup( groupId INT);
+CALL deleteGroup(10);

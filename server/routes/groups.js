@@ -156,4 +156,13 @@ router.get("/getMessages", authorization, async (req, res) => {
   }
 })
 
+router.delete("/deleteGroup", authorization, async (req, res) => {
+  try {
+    const groupId = req.header("groupId")
+    const deleteGroup = await pool.query("CALL deleteGroup($1);", [groupId])
+    res.json(deleteGroup)
+  } catch (err) {
+    res.status(500).json("Server Error")
+  }
+})
 module.exports = router
